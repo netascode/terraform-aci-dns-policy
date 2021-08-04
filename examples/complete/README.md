@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# Scaffolding Example
+# DNS Policy Example
 
 To run this example you need to execute:
 
@@ -12,12 +12,20 @@ $ terraform apply
 Note that this example will create resources. Resources can be destroyed with `terraform destroy`.
 
 ```hcl
-module "aci_scaffolding" {
-  source = "netascode/scaffolding/aci"
+module "aci_dns_policy" {
+  source = "netascode/dns-policy/aci"
 
-  name        = "ABC"
-  alias       = "ABC-ALIAS"
-  description = "My Description"
+  name          = "DNS1"
+  mgmt_epg      = "oob"
+  mgmt_epg_name = "OOB1"
+  providers_ = [{
+    ip        = "10.1.1.1"
+    preferred = true
+  }]
+  domains = [{
+    name    = "cisco.com"
+    default = true
+  }]
 }
 
 ```

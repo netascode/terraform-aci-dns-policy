@@ -1,5 +1,5 @@
 variable "name" {
-  description = "Tenant name."
+  description = "DNS policy name."
   type        = string
 
   validation {
@@ -8,24 +8,49 @@ variable "name" {
   }
 }
 
-variable "alias" {
-  description = "Tenant alias."
+variable "mgmt_epg" {
+  description = "Management EPG."
+  type        = string
+  default     = "inb"
+
+  validation {
+    condition     = contains(["inb", "oob"], var.mgmt_epg)
+    error_message = "Allowed values are `inb` or `oob`."
+  }
+}
+
+variable "mgmt_epg_name" {
+  description = "Management EPG name."
   type        = string
   default     = ""
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.alias))
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.mgmt_epg_name))
     error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 
-variable "description" {
-  description = "Tenant description."
-  type        = string
-  default     = ""
+variable "providers_" {
+  description = "List of DNS providers. Default value `preferred`: false."
+  type = list(object({
+    ip        = string
+    preferred = optional(bool)
+  }))
+  default = []
+}
+
+variable "domains" {
+  description = "List of domains. Default value `default`: false."
+  type = list(object({
+    name    = string
+    default = optional(bool)
+  }))
+  default = []
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9\\!#$%()*,-./:;@ _{|}~?&+]{0,128}$", var.description))
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `\\`, `!`, `#`, `$`, `%`, `(`, `)`, `*`, `,`, `-`, `.`, `/`, `:`, `;`, `@`, ` `, `_`, `{`, `|`, }`, `~`, `?`, `&`, `+`. Maximum characters: 128."
+    condition = alltrue([
+      for d in var.domains : can(regex("^[a-zA-Z0-9_.-]{0,64}$", d.name))
+    ])
+    error_message = "`name`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }

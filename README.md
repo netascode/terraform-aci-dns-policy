@@ -1,22 +1,30 @@
 <!-- BEGIN_TF_DOCS -->
-[![Tests](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml)
+[![Tests](https://github.com/netascode/terraform-aci-dns-policy/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-dns-policy/actions/workflows/test.yml)
 
-# Terraform ACI Scaffolding Module
+# Terraform ACI DNS Policy Module
 
-Description
+Manages ACI DNS Policy
 
 Location in GUI:
-`Tenants` » `XXX`
+`Fabric` » `Fabric Policies` » `Policies` » `Global` » `DNS Profiles`
 
 ## Examples
 
 ```hcl
-module "aci_scaffolding" {
-  source = "netascode/scaffolding/aci"
+module "aci_dns_policy" {
+  source = "netascode/dns-policy/aci"
 
-  name        = "ABC"
-  alias       = "ABC-ALIAS"
-  description = "My Description"
+  name          = "DNS1"
+  mgmt_epg      = "oob"
+  mgmt_epg_name = "OOB1"
+  providers_ = [{
+    ip        = "10.1.1.1"
+    preferred = true
+  }]
+  domains = [{
+    name    = "cisco.com"
+    default = true
+  }]
 }
 
 ```
@@ -38,20 +46,25 @@ module "aci_scaffolding" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_name"></a> [name](#input\_name) | Tenant name. | `string` | n/a | yes |
-| <a name="input_alias"></a> [alias](#input\_alias) | Tenant alias. | `string` | `""` | no |
-| <a name="input_description"></a> [description](#input\_description) | Tenant description. | `string` | `""` | no |
+| <a name="input_name"></a> [name](#input\_name) | DNS policy name. | `string` | n/a | yes |
+| <a name="input_mgmt_epg"></a> [mgmt\_epg](#input\_mgmt\_epg) | Management EPG. | `string` | `"inb"` | no |
+| <a name="input_mgmt_epg_name"></a> [mgmt\_epg\_name](#input\_mgmt\_epg\_name) | Management EPG name. | `string` | `""` | no |
+| <a name="input_providers_"></a> [providers\_](#input\_providers\_) | List of DNS providers. Default value `preferred`: false. | <pre>list(object({<br>    ip        = string<br>    preferred = optional(bool)<br>  }))</pre> | `[]` | no |
+| <a name="input_domains"></a> [domains](#input\_domains) | List of domains. Default value `default`: false. | <pre>list(object({<br>    name    = string<br>    default = optional(bool)<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `fvTenant` object. |
-| <a name="output_name"></a> [name](#output\_name) | Tenant name. |
+| <a name="output_dn"></a> [dn](#output\_dn) | Distinguished name of `dnsProfile` object. |
+| <a name="output_name"></a> [name](#output\_name) | DNS policy name. |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aci_rest.fvTenant](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dnsDomain](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dnsProfile](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dnsProv](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
+| [aci_rest.dnsRsProfileToEpg](https://registry.terraform.io/providers/netascode/aci/latest/docs/resources/rest) | resource |
 <!-- END_TF_DOCS -->
