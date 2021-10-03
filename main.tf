@@ -10,7 +10,7 @@ resource "aci_rest" "dnsRsProfileToEpg" {
   dn         = "${aci_rest.dnsProfile.id}/rsProfileToEpg"
   class_name = "dnsRsProfileToEpg"
   content = {
-    tDn = var.mgmt_epg == "oob" ? "uni/tn-mgmt/mgmtp-default/oob-${var.mgmt_epg_name}" : "uni/tn-mgmt/mgmtp-default/inb-${var.mgmt_epg_name}"
+    tDn = var.mgmt_epg_type == "oob" ? "uni/tn-mgmt/mgmtp-default/oob-${var.mgmt_epg_name}" : "uni/tn-mgmt/mgmtp-default/inb-${var.mgmt_epg_name}"
   }
 }
 

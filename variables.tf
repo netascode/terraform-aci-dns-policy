@@ -8,19 +8,19 @@ variable "name" {
   }
 }
 
-variable "mgmt_epg" {
-  description = "Management EPG."
+variable "mgmt_epg_type" {
+  description = "Management endpoint group type."
   type        = string
   default     = "inb"
 
   validation {
-    condition     = contains(["inb", "oob"], var.mgmt_epg)
+    condition     = contains(["inb", "oob"], var.mgmt_epg_type)
     error_message = "Allowed values are `inb` or `oob`."
   }
 }
 
 variable "mgmt_epg_name" {
-  description = "Management EPG name."
+  description = "Management endpoint group name."
   type        = string
   default     = ""
 

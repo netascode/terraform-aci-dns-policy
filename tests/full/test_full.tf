@@ -15,7 +15,7 @@ module "main" {
   source = "../.."
 
   name          = "DNS1"
-  mgmt_epg      = "oob"
+  mgmt_epg_type = "oob"
   mgmt_epg_name = "OOB1"
   providers_ = [{
     ip        = "10.1.1.1"
