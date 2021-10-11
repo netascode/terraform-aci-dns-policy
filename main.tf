@@ -7,7 +7,7 @@ resource "aci_rest" "dnsProfile" {
 }
 
 resource "aci_rest" "dnsRsProfileToEpg" {
-  dn         = "${aci_rest.dnsProfile.id}/rsProfileToEpg"
+  dn         = "${aci_rest.dnsProfile.dn}/rsProfileToEpg"
   class_name = "dnsRsProfileToEpg"
   content = {
     tDn = var.mgmt_epg_type == "oob" ? "uni/tn-mgmt/mgmtp-default/oob-${var.mgmt_epg_name}" : "uni/tn-mgmt/mgmtp-default/inb-${var.mgmt_epg_name}"
@@ -16,7 +16,7 @@ resource "aci_rest" "dnsRsProfileToEpg" {
 
 resource "aci_rest" "dnsProv" {
   for_each   = { for prov in var.providers_ : prov.ip => prov }
-  dn         = "${aci_rest.dnsProfile.id}/prov-[${each.value.ip}]"
+  dn         = "${aci_rest.dnsProfile.dn}/prov-[${each.value.ip}]"
   class_name = "dnsProv"
   content = {
     addr      = each.value.ip
@@ -26,7 +26,7 @@ resource "aci_rest" "dnsProv" {
 
 resource "aci_rest" "dnsDomain" {
   for_each   = { for dom in var.domains : dom.name => dom }
-  dn         = "${aci_rest.dnsProfile.id}/dom-${each.value.name}"
+  dn         = "${aci_rest.dnsProfile.dn}/dom-${each.value.name}"
   class_name = "dnsDomain"
   content = {
     name      = each.value.name
