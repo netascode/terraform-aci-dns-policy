@@ -5,8 +5,8 @@ terraform {
     }
 
     aci = {
-      source  = "netascode/aci"
-      version = ">=0.2.0"
+      source  = "CiscoDevNet/aci"
+      version = ">=2.0.0"
     }
   }
 }
@@ -27,7 +27,7 @@ module "main" {
   }]
 }
 
-data "aci_rest" "dnsProfile" {
+data "aci_rest_managed" "dnsProfile" {
   dn = "uni/fabric/dnsp-${module.main.name}"
 
   depends_on = [module.main]
@@ -38,13 +38,13 @@ resource "test_assertions" "dnsProfile" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.dnsProfile.content.name
+    got         = data.aci_rest_managed.dnsProfile.content.name
     want        = module.main.name
   }
 }
 
-data "aci_rest" "dnsRsProfileToEpg" {
-  dn = "${data.aci_rest.dnsProfile.id}/rsProfileToEpg"
+data "aci_rest_managed" "dnsRsProfileToEpg" {
+  dn = "${data.aci_rest_managed.dnsProfile.id}/rsProfileToEpg"
 
   depends_on = [module.main]
 }
@@ -54,13 +54,13 @@ resource "test_assertions" "dnsRsProfileToEpg" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.dnsRsProfileToEpg.content.tDn
+    got         = data.aci_rest_managed.dnsRsProfileToEpg.content.tDn
     want        = "uni/tn-mgmt/mgmtp-default/oob-OOB1"
   }
 }
 
-data "aci_rest" "dnsProv" {
-  dn = "${data.aci_rest.dnsProfile.id}/prov-[10.1.1.1]"
+data "aci_rest_managed" "dnsProv" {
+  dn = "${data.aci_rest_managed.dnsProfile.id}/prov-[10.1.1.1]"
 
   depends_on = [module.main]
 }
@@ -70,19 +70,19 @@ resource "test_assertions" "dnsProv" {
 
   equal "addr" {
     description = "addr"
-    got         = data.aci_rest.dnsProv.content.addr
+    got         = data.aci_rest_managed.dnsProv.content.addr
     want        = "10.1.1.1"
   }
 
   equal "preferred" {
     description = "preferred"
-    got         = data.aci_rest.dnsProv.content.preferred
+    got         = data.aci_rest_managed.dnsProv.content.preferred
     want        = "yes"
   }
 }
 
-data "aci_rest" "dnsDomain" {
-  dn = "${data.aci_rest.dnsProfile.id}/dom-cisco.com"
+data "aci_rest_managed" "dnsDomain" {
+  dn = "${data.aci_rest_managed.dnsProfile.id}/dom-cisco.com"
 
   depends_on = [module.main]
 }
@@ -92,13 +92,13 @@ resource "test_assertions" "dnsDomain" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.dnsDomain.content.name
+    got         = data.aci_rest_managed.dnsDomain.content.name
     want        = "cisco.com"
   }
 
   equal "isDefault" {
     description = "isDefault"
-    got         = data.aci_rest.dnsDomain.content.isDefault
+    got         = data.aci_rest_managed.dnsDomain.content.isDefault
     want        = "yes"
   }
 }

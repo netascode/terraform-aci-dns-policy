@@ -1,6 +1,6 @@
 module "aci_dns_policy" {
   source  = "netascode/dns-policy/aci"
-  version = ">= 0.0.1"
+  version = ">= 0.1.0"
 
   name          = "DNS1"
   mgmt_epg_type = "oob"

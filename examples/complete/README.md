@@ -14,7 +14,7 @@ Note that this example will create resources. Resources can be destroyed with `t
 ```hcl
 module "aci_dns_policy" {
   source  = "netascode/dns-policy/aci"
-  version = ">= 0.0.1"
+  version = ">= 0.1.0"
 
   name          = "DNS1"
   mgmt_epg_type = "oob"
@@ -28,6 +28,5 @@ module "aci_dns_policy" {
     default = true
   }]
 }
-
 ```
 <!-- END_TF_DOCS -->

@@ -5,8 +5,8 @@ terraform {
     }
 
     aci = {
-      source  = "netascode/aci"
-      version = ">=0.2.0"
+      source  = "CiscoDevNet/aci"
+      version = ">=2.0.0"
     }
   }
 }
@@ -17,7 +17,7 @@ module "main" {
   name = "DNS1"
 }
 
-data "aci_rest" "dnsProfile" {
+data "aci_rest_managed" "dnsProfile" {
   dn = "uni/fabric/dnsp-${module.main.name}"
 
   depends_on = [module.main]
@@ -28,7 +28,7 @@ resource "test_assertions" "dnsProfile" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.dnsProfile.content.name
+    got         = data.aci_rest_managed.dnsProfile.content.name
     want        = module.main.name
   }
 }
