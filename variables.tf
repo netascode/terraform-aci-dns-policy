@@ -34,7 +34,7 @@ variable "providers_" {
   description = "List of DNS providers. Default value `preferred`: false."
   type = list(object({
     ip        = string
-    preferred = optional(bool)
+    preferred = optional(bool, false)
   }))
   default = []
 }
@@ -43,7 +43,7 @@ variable "domains" {
   description = "List of domains. Default value `default`: false."
   type = list(object({
     name    = string
-    default = optional(bool)
+    default = optional(bool, false)
   }))
   default = []
 
